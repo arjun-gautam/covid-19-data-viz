@@ -6,6 +6,8 @@ import {
   extent,
   histogram as bin,
   timeMonths,
+  timeWeeks,
+  timeDays,
   sum,
   brushX,
   select,
@@ -41,7 +43,8 @@ export const DateHistogram = ({
       scaleTime()
         .domain(extent(data, xValue))
         .range([0, innerWidth])
-        .nice(),
+        // .nice()
+        ,
     [data, xValue, innerWidth]
   );
 
@@ -50,7 +53,7 @@ export const DateHistogram = ({
     return bin()
       .value(xValue)
       .domain(xScale.domain())
-      .thresholds(timeMonths(start, stop))(data)
+      .thresholds(timeDays(start, stop))(data)
       .map(array => ({
         y: sum(array, yValue),
         x0: array.x0,
