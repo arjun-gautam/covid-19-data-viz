@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { csv } from 'd3';
 
-const csvUrl =
-  'https://gist.githubusercontent.com/curran/a9656d711a8ad31d812b8f9963ac441c/raw/c22144062566de911ba32509613c84af2a99e8e2/MissingMigrants-Global-2019-10-08T09-47-14-subset.csv';
+const covidCsvUrl =
+  "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv"
 
 const row = d => {
   d.coords = d['Location Coordinates'].split(',').map(d => +d).reverse();
@@ -11,12 +11,30 @@ const row = d => {
   return d;
 };
 
+const transformData = (covidData) => {
+  if(covidData) {
+    const nestedArray = covidData.map(countryEntry => {
+      const coordinates = [+countryEntry['Long'], +countryEntry['Lat']]
+      return(Object.keys(countryEntry).slice(4).map((date, idx)=>{
+        return({
+          'Location Coordinates': `${coordinates[1]}, ${coordinates[0]}`,
+          'Reported Date': new Date(date),
+          'Total Dead and Missing': (+countryEntry[date] - (idx===0 ? 0 : +countryEntry[Object.keys(countryEntry).slice(4)[idx-1]])) < 0 ? 0 : (+countryEntry[date] - (idx===0 ? 0 : +countryEntry[Object.keys(countryEntry).slice(4)[idx-1]])),
+          'coords': coordinates,
+      })}))
+    }).flat(1)
+    return nestedArray
+  }
+  return
+}
+
 export const useData = () => {
-  const [data, setData] = useState(null);
+  const [covidData, setCovidData] = useState(null);
+  const transformedData = useMemo(()=>transformData(covidData), [covidData])
 
   useEffect(() => {
-    csv(csvUrl, row).then(setData);
+    csv(covidCsvUrl).then(setCovidData);
   }, []);
 
-  return data;
+  return transformedData;
 };
