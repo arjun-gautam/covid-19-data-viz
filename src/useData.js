@@ -6,7 +6,7 @@ const covidCsvUrl =
 
 const row = d => {
   d.coords = d['Location Coordinates'].split(',').map(d => +d).reverse();
-  d['Total Dead and Missing'] = + d['Total Dead and Missing'];
+  d['Total Confirmed'] = + d['Total Confirmed'];
   d['Reported Date'] = new Date(d['Reported Date']);
   return d;
 };
@@ -19,7 +19,7 @@ const transformData = (covidData) => {
         return({
           'Location Coordinates': `${coordinates[1]}, ${coordinates[0]}`,
           'Reported Date': new Date(date),
-          'Total Dead and Missing': (+countryEntry[date] - (idx===0 ? 0 : +countryEntry[Object.keys(countryEntry).slice(4)[idx-1]])) < 0 ? 0 : (+countryEntry[date] - (idx===0 ? 0 : +countryEntry[Object.keys(countryEntry).slice(4)[idx-1]])),
+          'Total Confirmed': (+countryEntry[date] - (idx===0 ? 0 : +countryEntry[Object.keys(countryEntry).slice(4)[idx-1]])) < 0 ? 0 : (+countryEntry[date] - (idx===0 ? 0 : +countryEntry[Object.keys(countryEntry).slice(4)[idx-1]])),
           'coords': coordinates,
       })}))
     }).flat(1)

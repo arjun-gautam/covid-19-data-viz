@@ -6,10 +6,22 @@ import { BubbleMap } from './BubbleMap/index.js';
 import { DateHistogram } from './DateHistogram/index.js';
 
 const width = 960;
-const height = 500;
+const height = 550;
 const dateHistogramSize = 0.2;
 
 const xValue = d => d['Reported Date'];
+
+const formatDate = (d) => {
+  let ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
+  let mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(d);
+  let da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
+  return `${da}-${mo}-${ye}`
+}
+
+const summedUpTotal = (arr) => {
+  const values = arr.map(val=>val['Total Confirmed'])
+  return values.reduce((a, b) => a + b, 0)
+}
 
 const App = () => {
   const worldAtlas = useWorldAtlas();
@@ -28,22 +40,33 @@ const App = () => {
     : data;
 
   return (
-    <svg width={width} height={height}>
-      <BubbleMap
-        data={data}
-        filteredData={filteredData}
-        worldAtlas={worldAtlas}
-      />
-      <g transform={`translate(0, ${height - dateHistogramSize * height})`}>
-        <DateHistogram
+    <>
+      <svg width={width} height={height}>
+        <BubbleMap
           data={data}
-          width={width}
-          height={dateHistogramSize * height}
-          setBrushExtent={setBrushExtent}
-          xValue={xValue}
+          filteredData={filteredData}
+          worldAtlas={worldAtlas}
         />
-      </g>
-    </svg>
+        <g transform={`translate(0, ${height - dateHistogramSize * height})`}>
+          <DateHistogram
+            data={data}
+            width={width}
+            height={dateHistogramSize * height}
+            setBrushExtent={setBrushExtent}
+            xValue={xValue}
+          />
+        </g>
+      </svg>
+      <div style={{ textAlign: 'center', width }}>
+        <small>
+          Select small intervals for good performance
+        </small>
+        <br/>
+        {brushExtent ? `${formatDate(brushExtent[0])} to ${formatDate(brushExtent[1])}` : 'Select the time frame'}
+        <br/>
+        Total Confirmed cases: {summedUpTotal(filteredData)/1000000}M
+      </div>
+    </>
   );
 };
 

@@ -23,8 +23,8 @@ const xAxisTickFormat = timeFormat('%m/%d/%Y');
 
 const xAxisLabel = 'Time';
 
-const yValue = d => d['Total Dead and Missing'];
-const yAxisLabel = 'Total Dead and Missing';
+const yValue = d => d['Total Confirmed'];
+const yAxisLabel = 'Total Confirmed';
 
 export const DateHistogram = ({
   data,

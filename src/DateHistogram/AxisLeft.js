@@ -8,7 +8,7 @@ export const AxisLeft = ({ yScale, innerWidth, tickOffset = 3 }) =>
         x={-tickOffset}
         dy=".32em"
       >
-        {tickValue}
+        {`${tickValue/1000000} M`}
       </text>
     </g>
   ));

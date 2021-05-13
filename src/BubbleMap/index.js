@@ -2,8 +2,8 @@ import React, { useMemo } from 'react';
 import { scaleSqrt, max } from 'd3';
 import { Marks } from './Marks';
 
-const sizeValue = d => d['Total Dead and Missing'];
-const maxRadius = 15;
+const sizeValue = d => d['Total Confirmed'];
+const maxRadius = 30;
 
 export const BubbleMap = ({ data, filteredData, worldAtlas }) => {
   const sizeScale = useMemo(
