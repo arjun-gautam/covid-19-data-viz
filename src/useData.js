@@ -14,12 +14,12 @@ const row = d => {
 const transformData = (covidData) => {
   if(covidData) {
     const nestedArray = covidData.map(countryEntry => {
-      const coordinates = [+countryEntry['Long'], +countryEntry['Lat']]
-      return(Object.keys(countryEntry).slice(4).map((date, idx)=>{
+      const coordinates = [parseFloat(countryEntry['Long']), parseFloat(countryEntry['Lat'])]
+      return(Object.keys(countryEntry).slice(4).map((item, idx)=>{
         return({
           'Location Coordinates': `${coordinates[1]}, ${coordinates[0]}`,
-          'Reported Date': new Date(date),
-          'Total Confirmed': (+countryEntry[date] - (idx===0 ? 0 : +countryEntry[Object.keys(countryEntry).slice(4)[idx-1]])) < 0 ? 0 : (+countryEntry[date] - (idx===0 ? 0 : +countryEntry[Object.keys(countryEntry).slice(4)[idx-1]])),
+          'Reported Date': new Date(item),
+          'Total Confirmed': (Number(countryEntry[item]) - (idx===0 ? 0 : Number(countryEntry[Object.keys(countryEntry).slice(4)[idx-1]]))) < 0 ? 0 : (Number(countryEntry[item]) - (idx===0 ? 0 : Number(countryEntry[Object.keys(countryEntry).slice(4)[idx-1]]))),
           'coords': coordinates,
       })}))
     }).flat(1)
@@ -30,11 +30,13 @@ const transformData = (covidData) => {
 
 export const useData = () => {
   const [covidData, setCovidData] = useState(null);
-  const transformedData = useMemo(()=>transformData(covidData), [covidData])
-
+  const [processedData, setProcessedData] = useState(null);
+  if (processedData === null && covidData !== null) {
+    setProcessedData(transformData(covidData))
+  }
   useEffect(() => {
     csv(covidCsvUrl).then(setCovidData);
   }, []);
 
-  return transformedData;
+  return processedData;
 };

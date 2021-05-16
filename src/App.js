@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import ReactDOM from 'react-dom';
 import { useWorldAtlas } from './useWorldAtlas';
 import { useData } from './useData';
 import { BubbleMap } from './BubbleMap/index.js';
 import { DateHistogram } from './DateHistogram/index.js';
+import MainApp from './Main'
 
 const width = 960;
-const height = 650;
+const height = 630;
 const dateHistogramSize = 0.2;
 
 const xValue = d => d['Reported Date'];
@@ -15,7 +16,7 @@ const formatDate = (d) => {
   let ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
   let mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(d);
   let da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
-  return `${da}-${mo}-${ye}`
+  return `${mo} ${da}, ${ye}`
 }
 
 const summedUpTotal = (arr) => {
@@ -124,54 +125,59 @@ const simplifyAndStoreData = (data) => {
   return 'completed'
 }
 
+const ToolTip = ({tooltip}) => {
+  const width = 300
+  return(
+    <div
+      style={{
+        position: 'absolute',
+        left: -width/2,
+        top: tooltip.positionY-60,
+        backgroundColor: 'white',
+        marginLeft: tooltip.positionX,
+        border: '1px solid #ccc',
+        padding: 5,
+        width,
+      }}>
+        {tooltip.message}
+    </div>
+  )
+}
+
+const getTypedValue = (totalConfirmedCases, type) => {
+  let dataTypeConfirmCases = totalConfirmedCases/1000 < 10 ? '' : 'K'
+  let confirmedValueWithDataType = totalConfirmedCases
+  dataTypeConfirmCases = totalConfirmedCases/1000000 < 10 ? dataTypeConfirmCases : 'M'
+  dataTypeConfirmCases = totalConfirmedCases/1000000000 < 10 ? dataTypeConfirmCases : 'B'
+  if (dataTypeConfirmCases === 'B') {
+    confirmedValueWithDataType = (totalConfirmedCases / 1000000000).toFixed(2)
+  } else if (dataTypeConfirmCases === 'M') {
+    confirmedValueWithDataType = (totalConfirmedCases / 1000000).toFixed(2)
+  } else if (dataTypeConfirmCases === 'K') {
+    confirmedValueWithDataType = (totalConfirmedCases / 1000).toFixed(2)
+  } else {
+    confirmedValueWithDataType = type === 'average' ? totalConfirmedCases.toFixed(2):Math.round(totalConfirmedCases)
+  }
+  return (`${confirmedValueWithDataType} ${dataTypeConfirmCases}`)
+}
+
 const App = () => {
   const worldAtlas = useWorldAtlas();
   let data = useData();
   const [brushExtent, setBrushExtent] = useState();
+  const [tooltip, setTooltip] = useState({showing:false, positionX: 0, positionY:0, message: ''});
 
   if (!worldAtlas || !data) {
     return <pre>Loading...</pre>;
   }
 
-  let filteredData = brushExtent
-    ? data.filter(d => {
-        const date = xValue(d);
-        return date > brushExtent[0] && date < brushExtent[1];
-      })
-    : data;
+  return <MainApp {...{tooltip, setTooltip, brushExtent, setBrushExtent, data, worldAtlas,
+    width,height,dateHistogramSize,xValue,formatDate,
+    summedUpTotal,findSmallestDate,findHighestDate,getChunkCount,compressChunk,
+    getProcessedSingleChunk,getChunks,simplifyAndStoreData,ToolTip,getTypedValue,
+    BubbleMap, DateHistogram
+  }} />
 
-  return (
-    <>
-    <div style={{ width: 'content-fit', right: 50, top: '25%', position: 'absolute' }}>
-      <small>
-        Select small intervals for good performance
-      </small>
-      <br/>
-      {brushExtent ? `${formatDate(brushExtent[0])} to ${formatDate(brushExtent[1])}` : 'Select the time frame'}
-      <br/>
-      <br/>
-      <br/>
-      Total Confirmed cases:<br/>{summedUpTotal(filteredData)/1000000}M
-    </div>
-      <svg width={width} height={height}>
-        <BubbleMap
-          data={data}
-          filteredData={filteredData}
-          worldAtlas={worldAtlas}
-        />
-        <g transform={`translate(0, ${height - dateHistogramSize * height})`}>
-          <DateHistogram
-            data={data}
-            width={width}
-            height={dateHistogramSize * height}
-            setBrushExtent={setBrushExtent}
-            xValue={xValue}
-          />
-        </g>
-      </svg>
-
-    </>
-  );
 };
 
 export default App;

@@ -1,28 +1,27 @@
 body {
   margin: 0;
-  overflow: hidden;
   font-family: 'Poppins', sans-serif;
 }
 pre {
   font-size: 7em;
 }
 .marks .land {
-  fill: #ececec;
+  fill: #ddd;
 }
 .marks .sphere {
-  fill: #fbfbfb;
+  fill: #fff;
 }
 .marks .interiors {
   fill: none;
-  stroke: #d9dfe0;
+  stroke: white;
 }
 .marks .graticules, .tick line {
   fill: none;
   stroke: #ececec;
 }
 circle {
-  fill: #137B80;
-  opacity: 0.3;
+  fill: #BD2D28;
+  opacity: 0.9;
 }
 
 .tick text {
@@ -30,7 +29,19 @@ circle {
   font-size: 0.5em;
 }
 .mark {
-  fill: #137B80;
+  fill: #BD2D28;
+}
+.count {
+  color: #E25A42;
+}
+#tooltip_value {
+  font-family:sans-serif;
+  font-size:18;
+  fill:#333;
+}
+
+.title {
+  color: #BD2D28;
 }
 .axis-label {
   font-size: 0.5em;
