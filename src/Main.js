@@ -146,10 +146,13 @@ const App = ({
         <br />
         <br />
         {countriesList.map((entry, idx)=>(
-          <div style={{color: '#333', paddingBottom:5}}>
+          <div style={{color: '#333', paddingBottom:5, fontSize: 14}}>
             {idx+1}. {entry}
           </div>
         ))}
+        <br/>
+        <div style={{color: '#666'}}>Data Source: <a href="https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv">
+        CSSEGISandData/COVID-19</a></div>
 
       </div>
       {tooltip.showing && <ToolTip tooltip={tooltip} />}

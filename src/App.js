@@ -168,7 +168,7 @@ const App = () => {
   const [tooltip, setTooltip] = useState({showing:false, positionX: 0, positionY:0, message: ''});
 
   if (!worldAtlas || !data) {
-    return <pre>Loading...</pre>;
+    return <div class="loader"></div>;
   }
 
   return <MainApp {...{tooltip, setTooltip, brushExtent, setBrushExtent, data, worldAtlas,
