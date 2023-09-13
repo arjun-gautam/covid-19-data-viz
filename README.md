@@ -10,8 +10,8 @@ https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data/csse_c
 It will take a while to run when the dataset get larger and larger.
 
 ## Error that might occur
-Error: Webpack build failing with ERR_OSSL_EVP_UNSUPPORTED
-Fix: Run "export NODE_OPTIONS=--openssl-legacy-provider"
+- Error: Webpack build failing with ERR_OSSL_EVP_UNSUPPORTED
+- Fix: Run "export NODE_OPTIONS=--openssl-legacy-provider"
 
 ## Screenshots
 Showing average by default
