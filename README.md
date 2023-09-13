@@ -23,5 +23,6 @@ Selecting interval
 
 
 Drag interval across timeline
-![Uploading 3.jpg…]()
+![3](https://github.com/arjun-gautam/covid-19-data-viz/assets/10881526/2ec6a31b-3b29-43ac-a0d2-eb33883171ed)
+
 
