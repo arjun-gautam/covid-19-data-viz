@@ -15,10 +15,13 @@ Fix: Run "export NODE_OPTIONS=--openssl-legacy-provider"
 
 ## Screenshots
 Showing average by default
-![Screenshot from 2023-09-13 13-32-59](https://github.com/arjun-gautam/covid-19-data-viz/assets/10881526/1c6456a1-48bf-4f7a-a685-85b4161e6548)
+![1](https://github.com/arjun-gautam/covid-19-data-viz/assets/10881526/51512e90-536b-4f85-9220-4e7077123260)
+
 
 Selecting interval
-![Screenshot from 2023-09-13 13-33-18](https://github.com/arjun-gautam/covid-19-data-viz/assets/10881526/fbf680e4-9e8e-42fa-a7aa-ddbafd3e0150)
+![2](https://github.com/arjun-gautam/covid-19-data-viz/assets/10881526/bf270135-fadc-477a-9825-80734555d2f5)
+
 
 Drag interval across timeline
-![Screenshot from 2023-09-13 13-33-26](https://github.com/arjun-gautam/covid-19-data-viz/assets/10881526/ff897fa6-682e-43bd-9e31-ac7187636436)
+![Uploading 3.jpg…]()
+
